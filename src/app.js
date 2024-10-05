@@ -62,6 +62,7 @@ math(p5);
 import './typography/attributes';
 import './typography/loading_displaying';
 import './typography/p5.Font';
+import './typography/type'; // added for v2
 
 // utilities
 import utilities from './utilities';

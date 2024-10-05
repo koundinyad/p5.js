@@ -16,22 +16,18 @@
 <body>
 <script type="module">
 import p5 from '../src/app.js';
-// import calculation from './src/math/calculation.js';
-
-// p5.registerAddon(calculation);
 
 const sketch = function(p){
   p.setup = function(){
     p.createCanvas(200, 200);
-  };
-
-  p.draw = function(){
     p.background(0, 50, 50);
-    p.circle(100, 100, 50);
-
     p.fill('white');
     p.textSize(30);
-    p.text('hello', 10, 30);
+    p.text('dog', 10, 30);
+    p.textSize(50);
+    p.text('dog', 10, 70);
+    console.log(p.textSize());
+    console.log(this.drawingContext.measureText('M'));
   };
 };
 
