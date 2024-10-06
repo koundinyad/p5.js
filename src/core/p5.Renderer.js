@@ -43,7 +43,11 @@ p5.Renderer = class Renderer {
       textAlign: constants.LEFT,
       textBaseline: constants.BASELINE,
       textStyle: constants.NORMAL,
-      textWrap: constants.WORD
+      textWrap: constants.WORD,
+
+      // type2.0
+      textWeight: 400,
+      textVariant: constants.NORMAL
     };
     this._pushPopStack = [];
     // NOTE: can use the length of the push pop stack instead

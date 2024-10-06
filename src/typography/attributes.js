@@ -544,4 +544,8 @@ p5.prototype.textWrap = function(wrapStyle) {
   return this._renderer.textWrap(wrapStyle);
 };
 
+p5.prototype.textBounds = function(...args) {
+  return this._renderer.textBounds(...args);
+};
+
 export default p5;

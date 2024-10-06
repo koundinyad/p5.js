@@ -419,8 +419,8 @@ p5.prototype.text = function(str, x, y, maxWidth, maxHeight) {
  * @param {Number} [size] font size in pixels.
  * @chainable
  */
-p5.prototype.textFont = function(theFont, theSize) {
-  p5._validateParameters('textFont', arguments);
+p5.prototype.textFont = function(theFont, theSize, theWeight, theStyle, theVariant) {
+ 
   if (arguments.length) {
     if (!theFont) {
       throw new Error('null font passed to textFont');
