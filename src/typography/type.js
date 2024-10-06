@@ -25,10 +25,13 @@ import * as constants from '../core/constants';
       textAlign: constants.LEFT,
       textBaseline: constants.BASELINE,
       textStyle: constants.NORMAL,
-      textWrap: constants.WORD
+      textWrap: constants.WORD,
+      textAscent: undefined,
+      textDescent: undefined, // 
 
-      textWeight: 400, // ADDED
-      textVariant: 'normal', // ADDED
+
+      textWeight: 400, // ADDED DCH
+      textVariant: 'normal', // ADDED DCH
        // textStretch, lineHeight ?
     };
 */
@@ -69,17 +72,6 @@ import * as constants from '../core/constants';
     attribute DOMString fontSizeAdjust;
 */
 
-// function getFontProps(context) {
-//   let [size, name] = context.font.split(' ');
-//   if (size.endsWith('px')) {
-//     size = Number.parseFloat(size);
-//   }
-//   else {
-//     // TODO: handle non-pixel font sizes
-//   }
-//   return { size, name };
-// }
-
 
 // API methods /////////////////////////////
 // text, textFont, textSize, textWidth, textAscent, textDescent, 
@@ -110,17 +102,20 @@ p5.prototype.loadFont = async function (...args) {
         errorCallback = arg;
       }
     }
+    else if (typeof arg === 'object') {
+      options = arg;
+    }
   }
 
-  const fontFile = new FontFace(name, `url(${path})`);
+  const fontFile = new FontFace(name, `url(${path})`, options);
   document.fonts.add(fontFile);
 
-  await new Promise(resolve =>
+  return await new Promise(resolve =>
     fontFile.load().then(() => {
       if (typeof callback !== 'undefined') {
-        callback();
+        callback(fontFile);
       }
-      resolve()
+      resolve(fontFile)
     },
       err => {
         // Error handling
@@ -132,33 +127,57 @@ p5.prototype.loadFont = async function (...args) {
         }
       }
     ));
+};
 
-  //return ret;
+Renderer2D.prototype.textStyle = function (s) {
+  if (s) {
+    if (
+      s === constants.NORMAL ||
+      s === constants.ITALIC ||
+      s === constants.BOLD ||
+      s === constants.BOLDITALIC
+    ) {
+      this.states.textStyle = s;
+    }
+    return this._applyTextProperties();
+  }
+
+  return this.states.textStyle;
+}
+
+
+Renderer2D.prototype.textAlign = function (h, v) {
+  if (typeof h !== 'undefined') {
+    this.states.textAlign = h;
+    if (typeof v !== 'undefined') {
+      this.states.textBaseline = v;
+    }
+    return this._applyTextProperties();
+  } else {
+    return {
+      horizontal: this.states.textAlign,
+      vertical: this.states.textBaseline
+    };
+  }
 };
 
 Renderer2D.prototype.textAscent = function () {
-  const ctx = this.drawingContext;
-  const previousTextBaseline = ctx.textBaseline;
-  const previousVerticalAlign = ctx.verticalAlign;
-  ctx.textBaseline = 'bottom';
-  ctx.verticalAlign = 'bottom';
-  const { fontBoundingBoxAscent } = ctx.measureText('d');
-  //console.log('fontBoundingBoxAscent', fontBoundingBoxAscent);
-  ctx.textBaseline = previousTextBaseline;// Reset baseline
-  ctx.verticalAlign = previousVerticalAlign;// Reset verticalAlign
+  const ctx = this.drawingContext;  
+  // const previousTextBaseline = ctx.textBaseline;
+  // const previousVerticalAlign = ctx.verticalAlign;
+  // ctx.textBaseline = 'bottom';
+  // ctx.verticalAlign = 'bottom';
+  const { fontBoundingBoxAscent } = ctx.measureText('');
+  // console.log('fontBoundingBoxAscent', fontBoundingBoxAscent);
+  // ctx.textBaseline = previousTextBaseline;// Reset baseline
+  // ctx.verticalAlign = previousVerticalAlign;// Reset verticalAlign
   return fontBoundingBoxAscent;
 }
 
 Renderer2D.prototype.textDescent = function () {
   const ctx = this.drawingContext;
-  const previousTextBaseline = ctx.textBaseline;
-  const previousVerticalAlign = ctx.verticalAlign;
-  ctx.textBaseline = 'bottom';
-  ctx.verticalAlign = 'bottom';
-  const { fontBoundingBoxDescent } = ctx.measureText('g');
-  //console.log('fontBoundingBoxDescent', fontBoundingBoxDescent);
-  ctx.textBaseline = previousTextBaseline;// Reset baseline
-  ctx.verticalAlign = previousVerticalAlign;// Reset verticalAlign
+  const { fontBoundingBoxDescent } = ctx.measureText('');
+  // console.log('fontBoundingBoxDescent', fontBoundingBoxDescent);
   return Math.abs(fontBoundingBoxDescent);
 }
 
@@ -169,9 +188,6 @@ Renderer2D.prototype.textWidth = function (s) {
     + Math.abs(metrics.actualBoundingBoxRight);
 }
 
-/*
-{ x: 5.7, y: 12.1 , w: 9.9, h: 28.6 }
- */
 Renderer2D.prototype.textBounds = function (s, x = 0, y = 0) {
   //console.log('type.textBounds', s, x, y);
   let metrics = this.drawingContext.measureText(s);
@@ -182,31 +198,11 @@ Renderer2D.prototype.textBounds = function (s, x = 0, y = 0) {
   return { x, y: y + metrics.actualBoundingBoxDescent, w, h };
 }
 
-/*
-  Renderer.states = {
-      doStroke: true,
-      strokeSet: false,
-      doFill: true,
-      fillSet: false,
-      rectMode: constants.CORNER,
-      textFont: 'sans-serif',
-      textLeading: 15,
-      leadingSet: false,
-      textSize: 12,
-      textAlign: constants.LEFT,
-      textBaseline: constants.BASELINE,
-      textStyle: constants.NORMAL,
-      textWrap: constants.WORD
-
-      textWeight: 'normal', // TO-ADD
-      textVariant: 'normal', // TO-ADD
-    };
-*/
 p5.prototype.textFont = function (theFont, theSize, theWeight, theStyle, theVariant) {
-  
-  console.log('type.textFont:', theFont, theSize, theWeight||"", theStyle||"", theVariant||"");
 
-  let { drawingContext, states  } = this._renderer;
+  //console.log('type.textFont:', theFont, theSize, theWeight || "", theStyle || "", theVariant || "");
+
+  let { drawingContext, states } = this._renderer;
 
   if (arguments.length) {
     if (!theFont) {
@@ -216,67 +212,49 @@ p5.prototype.textFont = function (theFont, theSize, theWeight, theStyle, theVari
       //      theSize = `${theSize}px`;
       theSize = Number.parseFloat(theSize);
     }
-    
+
     this._renderer.states.textFont = theFont;
-    if (theSize) {
+
+    if (typeof theSize !== 'undefined') {
       this._renderer.states.textSize = theSize;
     }
-    if (theWeight) {
+
+    if (typeof theWeight !== 'undefined') {
       this._renderer.states.textWeight = theWeight;
     }
-    if (theStyle) {
+    if (typeof theStyle !== 'undefined') {
       this._renderer.states.textStyle = theStyle;
     }
-    if (theVariant) {
+    if (typeof theVariant !== 'undefined') {
       this._renderer.states.textVariant = theVariant;
     }
-    
-    console.log('type.states.textSize:', theSize, this._renderer.states.textFont);
-    
-    
-    this.drawingContext.font = getFontString(this._renderer.drawingContext, this._renderer.states);
 
-    return this;
+    return this._renderer._applyTextProperties();
   }
 
   return getFontString(drawingContext, states);
 }
 
 Renderer2D.prototype.textSize = function (theSize) {
-  //console.log(this.states);
-  let theFont = this.states.textFont;
-  this.drawingContext.font = `${theSize}px ${theFont}`;
-}
-
-Renderer2D.prototype.textSizeX = function (s) {
-  //console.log('type.textSize', '"' + this.drawingContext.font + '"', getFontProps(this.drawingContext));
-  if (typeof s === 'number' || typeof s === 'string') {
-    setFontProps(this.drawingContext, s);
-    return this._pInst;
+  if (typeof theSize !== 'undefined') {
+    this.states.textSize = Number.parseFloat(theSize);
+    return this._applyTextProperties();
   }
-  return getFontProps(this.drawingContext).size;
+  return this.states.textSize;
 }
 
-Renderer2D.prototype.textFontX = function (theFont, theSize) {
-  if (arguments.length) {
-    if (!theFont) {
-      throw new Error('null font passed to textFont');
-    }
-    setFontProps(this.drawingContext, theSize, theFont);
-    //this._renderer.states.textFont = theFont;
-    if (theSize) {
-
-      // TODO: handle leading
-
-      //   // only use a default value if not previously set (#5181)
-      //   this._renderer.states._textLeading = theSize * constants._DEFAULT_LEADMULT;
-    }
-
-    return this._pInst;//._renderer._applyTextProperties();
+Renderer2D.prototype._applyTextProperties = function () {
+  let { drawingContext, states } = this;
+  drawingContext.font = getFontString(drawingContext, states);
+  drawingContext.textAlign = states.textAlign;
+  if (states.textBaseline === constants.CENTER) {
+    drawingContext.textBaseline = constants._CTX_MIDDLE;
+  } else {
+    drawingContext.textBaseline = states.textBaseline;
   }
-
-  return getFontProps(this.drawingContext).name; // or this.drawContext.font ?
+  return this._pInst;
 }
+
 
 // text() calls this method to render text
 Renderer2D.prototype._renderText = function (p, line, x, y, maxY, minY) {
@@ -314,7 +292,7 @@ function getFontString(context, states) {
   let weight = (textWeight === 'normal' || textWeight === 400) ? '' : textWeight;
   let variant = (textVariant === 'normal') ? '' : textVariant;
   let css = `${style} ${weight} ${variant} ${textSize}px ${textFont}`;
-  console.log('getFontString:', css);
+  //console.log('getFontString:', css);
   return css;
 }
 
@@ -412,4 +390,28 @@ function fontMetrics(context, string) {
 
   return cached[1];
 }
+*/
+// function getFontProps(context) {
+//   let [size, name] = context.font.split(' ');
+//   if (size.endsWith('px')) {
+//     size = Number.parseFloat(size);
+//   }
+//   else {
+//     // TODO: handle non-pixel font sizes
+//   }
+//   return { size, name };
+// }
+
+/*function parsedStyleForCSS(cssString) {
+  let el = document.createElement("span");
+  el.setAttribute("style", cssString);
+  return el.style; // CSSStyleDeclaration object
+}
+let parsedStyle = parsedStyleForCSS("font: bold italic small-caps 1em/1.5em verdana,sans-serif");
+console.log(parsedStyle["fontWeight"]); // bold
+console.log(parsedStyle["fontStyle"]); // italic
+console.log(parsedStyle["fontVariant"]); // small-caps
+console.log(parsedStyle["fontSize"]); // 1em
+console.log(parsedStyle["lineHeight"]); // 1.5em
+console.log(parsedStyle["fontFamily"]); // verdana, sans-serif 
 */

@@ -23,7 +23,7 @@
     const fontUrl = 'https://fonts.gstatic.com/s/sixtyfourconvergence/v1/m8IQjepPf7mIglv5K__zM9srGA7wurbybZMfZsqG2Q6EWlJro5FJSJ4acT9PoOPwGgieaK7zkSpdXP-GrR9Yw9Tg7E4HGLbUKPlOh102tuJuklou33nzLuCW.woff2'
     const sketch = function (p) {
       p.setup = async function () {
-        await p.loadFont('Sixty-four', fontUrl);
+
 
         let y = 50;
         p.createCanvas(200, 200);
@@ -33,27 +33,31 @@
 
         p.textSize(44);
         p.text('dog', 10, y);
-
         let tw = p.textWidth('dog');
-        p.line(10, y, 10 + tw, y);
-
         let ta = p.textAscent();
-        p.line(10, y, 10, y-ta);
-
         let td = p.textDescent();
-        p.line(10 + tw, y, 10 + tw, y+td);
+        p.line(10, y, 10, y - ta);
+        p.line(10, y, 10 + tw, y);
+        p.line(10 + tw, y, 10 + tw, y + td);
 
-        y += 60;
+        y += 75;
         p.textFont('Times', 64);
-        p.text('dog', 10, y);
-        let bb = p.textBounds('dog', 10, y);
+        p.text('Mog', 10, y);
+        let bb = p.textBounds('Mog', 10, y);
         p.noFill();
         p.rect(bb.x, bb.y, bb.w, -bb.h);
+        tw = p.textWidth('Mog');
+        ta = p.textAscent();
+        td = p.textDescent();
+        p.line(5, y, 5, y - ta);
+        p.line(5, y, 5 + tw + 5, y);
+        p.line(10 + tw, y, 10 + tw, y + td);
 
-        y += 70;
+        await p.loadFont('Sixty-four', fontUrl);
+        y += 60;
         p.fill('white');
         p.textFont("Sixty-four", 32);
-        p.text("Bitter", 5, y);
+        p.text("Bigger", 5, y);
       };
     };
 
