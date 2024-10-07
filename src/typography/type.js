@@ -151,7 +151,6 @@ p5.prototype.textFont = function (theFont, theSize, theWeight, theStyle, theVari
     if (typeof theSize !== 'undefined') {
       this._renderer.states.textSize = theSize;
     }
-
     if (typeof theWeight !== 'undefined') {
       this._renderer.states.textWeight = theWeight;
     }
@@ -165,7 +164,7 @@ p5.prototype.textFont = function (theFont, theSize, theWeight, theStyle, theVari
     return this._renderer._applyTextProperties();
   }
 
-  return getFontString(drawingContext, states);
+  return getFontString(states);
 }
 
 // Renderer2D text methods /////////////////////////
@@ -261,7 +260,7 @@ Renderer2D.prototype.textSize = function (theSize) {
 
 Renderer2D.prototype._applyTextProperties = function () {
   let { drawingContext, states } = this;
-  drawingContext.font = getFontString(drawingContext, states);
+  drawingContext.font = getFontString(states);
   drawingContext.textAlign = states.textAlign;
   if (states.textBaseline === constants.CENTER) {
     drawingContext.textBaseline = constants._CTX_MIDDLE;
@@ -302,7 +301,7 @@ Renderer2D.prototype._renderText = function (p, line, x, y, maxY, minY) {
 
 // Helper functions ////////////////////////
 
-function getFontString(context, states) {
+function getFontString(states) {
   let { textStyle, textVariant, textWeight, textSize, textFont } = states; // textStretch, lineHeight ?
   let style = (textStyle === 'normal') ? '' : textStyle;
   let weight = (textWeight === 'normal' || textWeight === 400) ? '' : textWeight;

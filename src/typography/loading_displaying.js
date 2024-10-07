@@ -127,6 +127,7 @@ import '../core/friendly_errors/fes_core';
  * </div>
  */
 p5.prototype.loadFont = async function(path, onSuccess, onError) {
+  throw Error('loadFont() is not supported in this renderer.');
   p5._validateParameters('loadFont', arguments);
   const p5Font = new p5.Font(this);
 
@@ -420,7 +421,7 @@ p5.prototype.text = function(str, x, y, maxWidth, maxHeight) {
  * @chainable
  */
 p5.prototype.textFont = function(theFont, theSize, theWeight, theStyle, theVariant) {
- 
+  throw Error('This method must be implemented by the subclass');
   if (arguments.length) {
     if (!theFont) {
       throw new Error('null font passed to textFont');

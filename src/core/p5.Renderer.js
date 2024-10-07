@@ -265,8 +265,8 @@ p5.Renderer = class Renderer {
       str = str.toString();
     }
 
-    // Replaces tabs with double-spaces and splits string on any line
-    // breaks present in the original string
+    // Replaces tabs with double-spaces and splits string on any linebreaks
+    // present in the original string
     str = str.replace(/(\t)/g, '  ');
     lines = str.split('\n');
 

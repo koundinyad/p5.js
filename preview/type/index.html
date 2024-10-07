@@ -16,7 +16,15 @@
     }
 
     img {
-      border: 1px solid #f0f;
+      border: 1px solid #fff;
+    }
+
+    img.gray {
+      border: 1px solid #eee;
+    }
+
+    img.red {
+      border: 1px solid #f00;
     }
 
     div {
@@ -31,6 +39,37 @@
   <script type="module">
 
     import p5 from '../../src/app.js';
+
+    var typographyLetterSketch = function (p) {
+      p.setup = function () {
+        var margin = 10;
+        var gap = 46;
+        var counter = 35;
+        p.createCanvas(720, 320);
+        p.background(0);
+        p.textFont('Georgia');
+        p.textSize(24);
+        p.textStyle(p.BOLD);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.translate(margin * 4, margin * 4);
+        for (var y = 0; y < p.height - gap; y += gap) {
+          for (var x = 0; x < p.width - gap; x += gap) {
+            var letter = p.char(counter);
+            if (letter === 'P' || letter === '5') {
+              p.fill(255, 204, 0);
+            } else if (letter === 'J' || letter === 'S') {
+              p.fill(204, 0, 255);
+            } else {
+              p.fill(255);
+            }
+            p.text(letter, x, y);
+            counter++;
+          }
+        }
+        p.translate(margin * -4, margin * -4);
+        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 21, 1));
+      };
+    };
 
     var textSketch = function (p) {
       p.setup = function () {
@@ -617,9 +656,6 @@
     var textFlySketch = function (p) {
       var x1 = 100;
       var x2 = 0;
-      p.preload = function () {
-        var img = p.loadImage('p5v2.jpg');
-      };
       p.setup = function () {
         p.createCanvas(240, 160);
         p.fill(0);
@@ -637,7 +673,6 @@
         if (x1 < -100) {
           x1 = 240;
         }
-        img && p.image(img, p.width - 20, 0);
       };
     };
 
@@ -741,44 +776,16 @@
         p.push();
         p.translate(0, 33);
         for (var i = 0; i < str.length; i++) {
-          var angle = p.map(p.mouseX, 0, p.width, 0, p.PI / 8);
+          var angle = p.max(0, p.map(p.mouseX, 0, p.width, 0, p.PI / 8));
           p.rotate(angle);
-          p.text(str[i], 20, 0);
-          p.translate(p.textWidth(str[i]) * 1.5, 0);
+          p.text(str[i], 50, 0);
+          p.translate(p.textWidth(str[i]), 0);
         }
         p.pop();
       };
     };
 
-    var typographyLetterSketch = function (p) {
-      var margin = 10;
-      var gap = 46;
-      var counter = 35;
-      p.setup = function () {
-        p.createCanvas(720, 320);
-        p.background(0);
-        p.textFont('Georgia');
-        p.textSize(24);
-        p.textStyle(p.BOLD);
-        p.textAlign(p.CENTER, p.CENTER);
-        p.translate(margin * 4, margin * 4);
-        for (var y = 0; y < p.height - gap; y += gap) {
-          for (var x = 0; x < p.width - gap; x += gap) {
-            var letter = p.char(counter);
-            if (letter === 'P' || letter === '5') {
-              p.fill(255, 204, 0);
-            } else if (letter === 'J' || letter === 'S') {
-              p.fill(204, 0, 255);
-            } else {
-              p.fill(255);
-            }
-            p.text(letter, x, y);
-            counter++;
-          }
-        }
-      };
-    };
-
+    new p5(typographyLetterSketch, 'typographyLetterSketch');
     new p5(textSketch, 'textSketch');
     new p5(textLineSketch, 'textLineSketch');
     new p5(textWrapSketch, 'textWrapSketch');
@@ -794,68 +801,71 @@
     new p5(textStyleSketch, 'textStyleSketch');
     new p5(textWidthSketch, 'textWidthSketch');
     new p5(textOverlapSketch, 'textOverlapSketch');
-    // new p5(textFlySketch, 'textFlySketch');
-    // new p5(textFlickerSketch, 'textFlickerSketch');
-    // new p5(textFadeSketch, 'textFadeSketch');
-    // new p5(textRotateSketch, 'textRotateSketch');
-    // new p5(textGrowSketch, 'textGrowSketch');
-    // new p5(textAvoidSketch, 'textAvoidSketch');
-    // new p5(textBendSketch, 'textBendSketch');
-    // new p5(typographyLetterSketch, 'typographyLetterSketch');
+    new p5(textFlySketch, 'textFlySketch');
+    new p5(textFlickerSketch, 'textFlickerSketch');
+    new p5(textFadeSketch, 'textFadeSketch');
+    new p5(textRotateSketch, 'textRotateSketch');
+    new p5(textGrowSketch, 'textGrowSketch');
+    new p5(textAvoidSketch, 'textAvoidSketch');
+    new p5(textBendSketch, 'textBendSketch');
 
   </script>
 
+  <div id='typographyLetterSketch'>
+    <img src="typographyLetterSketch.png" width="720" height="320"></img>
+    <img src="typographyLetterSketch.p5.png" width="720" height="320"></img>
+  </div>
   <div id='textSketch'>
     <img src="textSketch.p5.png" width="240" height="160"></img>
     <img src="textSketch.png" width="240" height="160"></img>
   </div>
   <div id='textLineSketch'>
-    <img src="textLineSketch.png" width="960" height="160"></img>
-    <img src="textLineSketch.p5.png" width="960" height="160"></img>
+    <img src="textLineSketch.png" width="960" height="160" class="gray"></img>
+    <img src="textLineSketch.p5.png" width="960" height="160" class="gray"></img>
   </div>
   <div id='textWrapSketch'>
-    <img src="textWrapSketch.png" width="960" height="160"></img>
-    <img src="textWrapSketch.p5.png" width="960" height="160"></img>
-
+    <img src="textWrapSketch.png" width="960" height="160" class="gray"></img>
+    <img src="textWrapSketch.p5.png" width="960" height="160" class="gray"></img>
   </div>
   <div id='textFontSketch'>
-    <img src="textFontSketch.p5.jpg" width="240" height="160"></img>
+    <img src="textFontSketch.p5.jpg" width="240" height="160" class="gray"></img>
 
   </div>
   <div id='textAlignSketch'>
-    <img src="textAlignSketch.png" width="240" height="160"></img>
+    <img src="textAlignSketch.png" width="240" height="160" class="gray"></img>
   </div>
-  <div id="textAllAlignmentsSketch" style="position:relative;">    
+  <div id="textAllAlignmentsSketch" style="position:relative;">
     <img src="textAllAlignmentsSketch.png" width="400" height="600" style="display:inline-block;"></img>
   </div>
   <div id="textAllAlignmentsSketch2" style="position:relative;">
     <img src="textAllAlignmentsSketch.p5.jpg" width="400" height="600" style="display:inline-block;"></img>
   </div>
   <div id='textLeadingSketch'>
-    <img src="LEFT.TOP.lead.png" width="400" height="200"></img>
+    <img src="LEFT.TOP.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textLeadingSketch2'>
-    <img src="LEFT.CENTER.lead.png" width="400" height="200"></img>
+    <img src="LEFT.CENTER.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textLeadingSketch3'>
-    <img src="LEFT.BL.lead.png" width="400" height="200"></img>
+    <img src="LEFT.BL.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textLeadingSketch4'>
-    <img src="LEFT.BOTTOM.lead.png" width="400" height="200"></img>
+    <img src="LEFT.BOTTOM.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textSizeSketch'>
-    <img src="textSizeSketch.png" width="240" height="160"></img>
+    <img src="textSizeSketch.png" width="240" height="160" class="gray"></img>
   </div>
   <div id='textStyleSketch'>
-    <img src="textStyleSketch.p5.jpg" width="240" height="160"></img>
+    <img src="textStyleSketch.p5.jpg" width="240" height="160" class="gray"></img>
   </div>
   <div id='textWidthSketch'>
-    <img src="textWidthSketch.p5.png" width="240" height="160"></img>
-    <img src="textWidthSketch.png" width="240" height="160"></img>
+    <img src="textWidthSketch.p5.png" width="240" height="160" class="red"></img>
+    <img src="textWidthSketch.png" width="240" height="160" class="gray"></img>
   </div>
   <div id='textOverlapSketch'>
-    <img src="textOverlapSketch.png" width="240" height="160"></img>
+    <img src="textOverlapSketch.png" width="240" height="160" class="gray"></img>
   </div>
+
   <!-- animations -->
   <div id='textFlySketch'>
   </div>
@@ -871,8 +881,7 @@
   </div>
   <div id='textBendSketch'>
   </div>
-  <div id='typographyLetterSketch'>
-  </div>
+
 </body>
 
 </html>
