@@ -151,6 +151,7 @@ p5.Renderer = class Renderer {
   }
 
   textSize(s) {
+    throw Error('This method must be implemented by the subclass');
     if (typeof s === 'number') {
       this.states.textSize = s;
       if (!this.states.leadingSet) {
@@ -164,6 +165,8 @@ p5.Renderer = class Renderer {
   }
 
   textLeading (l) {
+    throw Error('This method must be implemented by the subclass');
+
     if (typeof l === 'number') {
       this.states.leadingSet = true;
       this.states.textLeading = l;
@@ -174,6 +177,8 @@ p5.Renderer = class Renderer {
   }
 
   textStyle (s) {
+    throw Error('This method must be implemented by the subclass');
+
     if (s) {
       if (
         s === constants.NORMAL ||
@@ -191,6 +196,8 @@ p5.Renderer = class Renderer {
   }
 
   textAscent () {
+    throw Error('This method must be implemented by the subclass');
+
     if (this.states.textAscent === null) {
       this._updateTextMetrics();
     }
@@ -198,6 +205,8 @@ p5.Renderer = class Renderer {
   }
 
   textDescent () {
+    throw Error('This method must be implemented by the subclass');
+
     if (this.states.textDescent === null) {
       this._updateTextMetrics();
     }
@@ -205,6 +214,8 @@ p5.Renderer = class Renderer {
   }
 
   textAlign (h, v) {
+    throw Error('This method must be implemented by the subclass');
+
     if (typeof h !== 'undefined') {
       this.states.textAlign = h;
 
@@ -222,11 +233,14 @@ p5.Renderer = class Renderer {
   }
 
   textWrap (wrapStyle) {
+    throw Error('This method must be implemented by the subclass');
+
     this.states.textWrap = wrapStyle;
     return this.states.textWrap;
   }
 
   text(str, x, y, maxWidth, maxHeight) {
+    
     const p = this._pInst;
     const textWrapStyle = this.states.textWrap;
 

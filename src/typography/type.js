@@ -77,6 +77,8 @@ import * as constants from '../core/constants';
 // text, textFont, textSize, textWidth, textAscent, textDescent, 
 // textAlign, textLeading, textWrap, textBounds
 
+// p5 text methods /////////////////////////
+
 p5.prototype.loadFont = async function (...args) {
 
   console.log('Renderer2D.prototype.loadFont');
@@ -129,75 +131,6 @@ p5.prototype.loadFont = async function (...args) {
     ));
 };
 
-Renderer2D.prototype.textStyle = function (s) {
-  if (s) {
-    if (
-      s === constants.NORMAL ||
-      s === constants.ITALIC ||
-      s === constants.BOLD ||
-      s === constants.BOLDITALIC
-    ) {
-      this.states.textStyle = s;
-    }
-    return this._applyTextProperties();
-  }
-
-  return this.states.textStyle;
-}
-
-
-Renderer2D.prototype.textAlign = function (h, v) {
-  if (typeof h !== 'undefined') {
-    this.states.textAlign = h;
-    if (typeof v !== 'undefined') {
-      this.states.textBaseline = v;
-    }
-    return this._applyTextProperties();
-  } else {
-    return {
-      horizontal: this.states.textAlign,
-      vertical: this.states.textBaseline
-    };
-  }
-};
-
-Renderer2D.prototype.textAscent = function () {
-  const ctx = this.drawingContext;  
-  // const previousTextBaseline = ctx.textBaseline;
-  // const previousVerticalAlign = ctx.verticalAlign;
-  // ctx.textBaseline = 'bottom';
-  // ctx.verticalAlign = 'bottom';
-  const { fontBoundingBoxAscent } = ctx.measureText('');
-  // console.log('fontBoundingBoxAscent', fontBoundingBoxAscent);
-  // ctx.textBaseline = previousTextBaseline;// Reset baseline
-  // ctx.verticalAlign = previousVerticalAlign;// Reset verticalAlign
-  return fontBoundingBoxAscent;
-}
-
-Renderer2D.prototype.textDescent = function () {
-  const ctx = this.drawingContext;
-  const { fontBoundingBoxDescent } = ctx.measureText('');
-  // console.log('fontBoundingBoxDescent', fontBoundingBoxDescent);
-  return Math.abs(fontBoundingBoxDescent);
-}
-
-Renderer2D.prototype.textWidth = function (s) {
-  let metrics = this.drawingContext.measureText(s);
-  // this should be more accurate than width
-  return Math.abs(metrics.actualBoundingBoxLeft)
-    + Math.abs(metrics.actualBoundingBoxRight);
-}
-
-Renderer2D.prototype.textBounds = function (s, x = 0, y = 0) {
-  //console.log('type.textBounds', s, x, y);
-  let metrics = this.drawingContext.measureText(s);
-  let w = metrics.actualBoundingBoxLeft
-    + metrics.actualBoundingBoxRight;
-  let h = metrics.actualBoundingBoxAscent
-    + Math.abs(metrics.actualBoundingBoxDescent);
-  return { x, y: y + metrics.actualBoundingBoxDescent, w, h };
-}
-
 p5.prototype.textFont = function (theFont, theSize, theWeight, theStyle, theVariant) {
 
   //console.log('type.textFont:', theFont, theSize, theWeight || "", theStyle || "", theVariant || "");
@@ -234,6 +167,89 @@ p5.prototype.textFont = function (theFont, theSize, theWeight, theStyle, theVari
 
   return getFontString(drawingContext, states);
 }
+
+// Renderer2D text methods /////////////////////////
+
+Renderer2D.prototype.textLeading = function (leading) {
+
+  if (typeof leading === 'number') {
+    this.states.leadingSet = true;
+    this.states.textLeading = leading;
+    return this._pInst;
+  }
+
+  return this.states.textLeading;
+}
+
+Renderer2D.prototype.textStyle = function (s) {
+  if (s) {
+    if (
+      s === constants.NORMAL ||
+      s === constants.ITALIC ||
+      s === constants.BOLD ||
+      s === constants.BOLDITALIC
+    ) {
+      this.states.textStyle = s;
+    }
+    return this._applyTextProperties();
+  }
+
+  return this.states.textStyle;
+}
+
+
+Renderer2D.prototype.textAlign = function (h, v) {
+  if (typeof h !== 'undefined') {
+    this.states.textAlign = h;
+    if (typeof v !== 'undefined') {
+      this.states.textBaseline = v;
+    }
+    return this._applyTextProperties();
+  } else {
+    return {
+      horizontal: this.states.textAlign,
+      vertical: this.states.textBaseline
+    };
+  }
+};
+
+Renderer2D.prototype.textAscent = function () {
+  const ctx = this.drawingContext;
+  // const previousTextBaseline = ctx.textBaseline;
+  // const previousVerticalAlign = ctx.verticalAlign;
+  // ctx.textBaseline = 'bottom';
+  // ctx.verticalAlign = 'bottom';
+  const { fontBoundingBoxAscent } = ctx.measureText('');
+  // console.log('fontBoundingBoxAscent', fontBoundingBoxAscent);
+  // ctx.textBaseline = previousTextBaseline;// Reset baseline
+  // ctx.verticalAlign = previousVerticalAlign;// Reset verticalAlign
+  return fontBoundingBoxAscent;
+}
+
+Renderer2D.prototype.textDescent = function () {
+  const ctx = this.drawingContext;
+  const { fontBoundingBoxDescent } = ctx.measureText('');
+  // console.log('fontBoundingBoxDescent', fontBoundingBoxDescent);
+  return Math.abs(fontBoundingBoxDescent);
+}
+
+Renderer2D.prototype.textWidth = function (s) {
+  let metrics = this.drawingContext.measureText(s);
+  // this should be more accurate than width
+  return Math.abs(metrics.actualBoundingBoxLeft)
+    + Math.abs(metrics.actualBoundingBoxRight);
+}
+
+Renderer2D.prototype.textBounds = function (s, x = 0, y = 0) {
+  //console.log('type.textBounds', s, x, y);
+  let metrics = this.drawingContext.measureText(s);
+  let w = metrics.actualBoundingBoxLeft
+    + metrics.actualBoundingBoxRight;
+  let h = metrics.actualBoundingBoxAscent
+    + Math.abs(metrics.actualBoundingBoxDescent);
+  return { x, y: y + metrics.actualBoundingBoxDescent, w, h };
+}
+
 
 Renderer2D.prototype.textSize = function (theSize) {
   if (typeof theSize !== 'undefined') {

@@ -1304,6 +1304,7 @@ class Renderer2D extends Renderer {
 
 
   _renderText(p, line, x, y, maxY, minY) {
+    throw Error('This method must be implemented by the subclass');
     if (y < minY || y >= maxY) {
       return; // don't render lines beyond our minY/maxY bounds (see #5785)
     }
@@ -1337,6 +1338,7 @@ class Renderer2D extends Renderer {
   }
 
   textWidth(s) {
+    throw Error('This method must be implemented by the subclass');
     if (this._isOpenType()) {
       return this.states.textFont._textWidth(s, this.states.textSize);
     }
@@ -1345,6 +1347,7 @@ class Renderer2D extends Renderer {
   }
 
   _applyTextProperties() {
+    throw Error('This method must be implemented by the subclass');
     let font;
     const p = this._pInst;
 
