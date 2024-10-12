@@ -2,8 +2,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <!-- <script language="javascript" type="text/javascript" src="../../../../lib/p5.js"></script>
-  <script language="javascript" type="text/javascript" src="sketch.js"></script> -->
+  <!-- <script language="javascript" type="text/javascript" src="img/../../../../lib/p5.js"></script>
+  <script language="javascript" type="text/javascript" src="img/sketch.js"></script> -->
   <style>
     body {
       padding: 0;
@@ -67,7 +67,7 @@
           }
         }
         p.translate(margin * -4, margin * -4);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 21, 1));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 21, 1));
       };
     };
 
@@ -96,7 +96,7 @@
             220,
             60
           );
-        p.loadImage('p5v2.jpg').then((img) => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then((img) => p.image(img, p.width - 20, 0));
       };
     };
 
@@ -205,7 +205,7 @@
         p.textAlign(p.RIGHT, p.BASELINE);
         p.text('RIGHT BASELINE is simply dummy text.', 730, 110);
 
-        p.loadImage('p5v2.jpg').then((img) => p.image(img, p.width - 30, 0));
+        p.loadImage('img/p5v2.jpg').then((img) => p.image(img, p.width - 30, 0));
 
       };
     };
@@ -387,7 +387,7 @@
           40
         );
       };
-      p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+      p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
     };
 
     var textFontSketch = function (p) {
@@ -403,7 +403,45 @@
         p.text('Arial Font', 10, 60);
         p.textFont('Courier');
         p.text('Courier Font', 10, 90);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+      };
+    };
+
+    var loadedFontSketch = function (p) {
+      p.setup = async function () {
+        p.createCanvas(240, 220);
+        p.background(255);
+        p.textSize(27);
+        p.fill(0);
+        p.strokeWeight(0);
+
+        // await plus (name, path) -> font-string
+        await p.loadFont("font/acmesa.ttf", "acmesa")
+        p.textFont("acmesa");
+        p.text('Acmesa.ttf', 10, 40);
+
+        // await plus (name, path) -> font-object
+        let f = await p.loadFont("font/AndaleMono.ttf", "andale");
+        p.textFont(f);
+        p.text('AndaleMono.ttf', 10, 80);
+
+        // then plus (name, path) -> font-object
+        p.loadFont("font/FiraSans-Book.otf", "FiraSans").then(f => {
+          p.textFont(f);
+          p.text('FiraSans-Book.otf', 10, 120);
+        });
+
+        // await plus (path) -> font-object
+        f = await p.loadFont("font/Lato-Black.ttf");
+        p.textFont(f);
+        p.text('Lato-Black.ttf', 10, 160);
+
+        // await plus (path) -> font-string
+        await p.loadFont("font/PlayfairDisplay.ttf");
+        p.textFont('PlayfairDisplay');
+        p.text('PlayfairDisplay.ttf', 10, 200);
+
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
       };
     };
 
@@ -423,7 +461,7 @@
         p.text('Right Baseline', 120, 90);
         p.strokeWeight(1);
         p.line(120, 0, 120, 160);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -478,7 +516,7 @@
         // p.loadFont("../arial.ttf", function(font) {drawFontAlignments(font, "Arial", 0, 0)});
         // p.loadFont("../times.ttf", function(font) {drawFontAlignments(font, "Times", 0, 200)});
         // p.loadFont("../consola.ttf", function(font) {drawFontAlignments(font, "Consolas", 0, 400)});
-        //p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 40, 0));
+        //p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 40, 0));
       };
     };
 
@@ -503,7 +541,7 @@
         p.text(s20 + '\n' + s20 + '\n' + s20, 140, 100);
         p.textLeading(30); // Set leading to 30
         p.text(s30 + '\n' + s30 + '\n' + s30, 270, 100);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -529,7 +567,7 @@
         p.text(s20 + '\n' + s20 + '\n' + s20, 140, 100);
         p.textLeading(30); // Set leading to 30
         p.text(s30 + '\n' + s30 + '\n' + s30, 270, 100);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -555,7 +593,7 @@
         p.text(s20 + '\n' + s20 + '\n' + s20, 140, 100);
         p.textLeading(30); // Set leading to 30
         p.text(s30 + '\n' + s30 + '\n' + s30, 270, 100);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -581,7 +619,7 @@
         p.text(s20 + '\n' + s20 + '\n' + s20, 140, 100);
         p.textLeading(30); // Set leading to 30
         p.text(s30 + '\n' + s30 + '\n' + s30, 270, 100);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -597,7 +635,7 @@
         p.text('Font Size 14', 10, 60);
         p.textSize(16);
         p.text('Font Size 16', 10, 90);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -614,7 +652,7 @@
         p.text('Font Style Italic', 10, 60);
         p.textStyle(p.BOLD);
         p.text('Font Style Bold', 10, 90);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -630,7 +668,7 @@
         p.text(s, 10, 30);
         p.rect(10, 30, textWidth, 2);
         p.text('width: ' + textWidth, 10, 60);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
       };
     };
 
@@ -648,7 +686,7 @@
         p.text('L', 120, 100);
         p.text('A', 150, 100);
         p.text('P', 180, 100);
-        p.loadImage('p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
+        p.loadImage('img/p5v2.jpg').then(img => p.image(img, p.width - 20, 0));
 
       };
     };
@@ -790,6 +828,7 @@
     new p5(textLineSketch, 'textLineSketch');
     new p5(textWrapSketch, 'textWrapSketch');
     new p5(textFontSketch, 'textFontSketch');
+    new p5(loadedFontSketch, 'loadedFontSketch');
     new p5(textAlignSketch, 'textAlignSketch');
     new p5(textAllAlignmentsSketch, 'textAllAlignmentsSketch');
     new p5(textAllAlignmentsSketch, 'textAllAlignmentsSketch2');
@@ -812,58 +851,63 @@
   </script>
 
   <div id='typographyLetterSketch'>
-    <img src="typographyLetterSketch.png" width="720" height="320"></img>
-    <img src="typographyLetterSketch.p5.png" width="720" height="320"></img>
+    <img src="img/typographyLetterSketch.png" width="720" height="320"></img>
+    <img src="img/typographyLetterSketch.p5.png" width="720" height="320"></img>
   </div>
   <div id='textSketch'>
-    <img src="textSketch.p5.png" width="240" height="160"></img>
-    <img src="textSketch.png" width="240" height="160"></img>
+    <img src="img/textSketch.p5.png" width="240" height="160"></img>
+    <img src="img/textSketch.png" width="240" height="160"></img>
   </div>
   <div id='textLineSketch'>
-    <img src="textLineSketch.png" width="960" height="160" class="gray"></img>
-    <img src="textLineSketch.p5.png" width="960" height="160" class="gray"></img>
+    <img src="img/textLineSketch.png" width="960" height="160" class="gray"></img>
+    <img src="img/textLineSketch.p5.png" width="960" height="160" class="gray"></img>
   </div>
   <div id='textWrapSketch'>
-    <img src="textWrapSketch.png" width="960" height="160" class="gray"></img>
-    <img src="textWrapSketch.p5.png" width="960" height="160" class="gray"></img>
+    <img src="img/textWrapSketch.png" width="960" height="160" class="gray"></img>
+    <img src="img/textWrapSketch.p5.png" width="960" height="160" class="gray"></img>
   </div>
   <div id='textFontSketch'>
-    <img src="textFontSketch.p5.jpg" width="240" height="160" class="gray"></img>
-
+    <img src="img/textFontSketch.p5.jpg" width="240" height="160" class="gray"></img>
+    <img src="img/textFontSketch.jpg" width="240" height="160" class="gray"></img>
+  </div>
+  <div id='loadedFontSketch'>
+    <img src="img/loadedFontSketch.p5.png" width="240" height="240" class="gray"></img>
+    <!-- <img src="img/loadedFontSketch.jpg" width="240" height="160" class="gray"></img> -->
   </div>
   <div id='textAlignSketch'>
-    <img src="textAlignSketch.png" width="240" height="160" class="gray"></img>
+    <img src="img/textAlignSketch.p5.png" width="240" height="160" class="gray"></img>
+    <img src="img/textAlignSketch.png" width="240" height="160" class="gray"></img>
   </div>
   <div id="textAllAlignmentsSketch" style="position:relative;">
-    <img src="textAllAlignmentsSketch.png" width="400" height="600" style="display:inline-block;"></img>
+    <img src="img/textAllAlignmentsSketch.png" width="400" height="600" style="display:inline-block;"></img>
   </div>
   <div id="textAllAlignmentsSketch2" style="position:relative;">
-    <img src="textAllAlignmentsSketch.p5.jpg" width="400" height="600" style="display:inline-block;"></img>
+    <img src="img/textAllAlignmentsSketch.p5.jpg" width="400" height="600" style="display:inline-block;"></img>
   </div>
   <div id='textLeadingSketch'>
-    <img src="LEFT.TOP.lead.png" width="400" height="200" class="gray"></img>
+    <img src="img/LEFT.TOP.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textLeadingSketch2'>
-    <img src="LEFT.CENTER.lead.png" width="400" height="200" class="gray"></img>
+    <img src="img/LEFT.CENTER.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textLeadingSketch3'>
-    <img src="LEFT.BL.lead.png" width="400" height="200" class="gray"></img>
+    <img src="img/LEFT.BL.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textLeadingSketch4'>
-    <img src="LEFT.BOTTOM.lead.png" width="400" height="200" class="gray"></img>
+    <img src="img/LEFT.BOTTOM.lead.png" width="400" height="200" class="gray"></img>
   </div>
   <div id='textSizeSketch'>
-    <img src="textSizeSketch.png" width="240" height="160" class="gray"></img>
+    <img src="img/textSizeSketch.png" width="240" height="160" class="gray"></img>
   </div>
   <div id='textStyleSketch'>
-    <img src="textStyleSketch.p5.jpg" width="240" height="160" class="gray"></img>
+    <img src="img/textStyleSketch.p5.jpg" width="240" height="160" class="gray"></img>
   </div>
   <div id='textWidthSketch'>
-    <img src="textWidthSketch.p5.png" width="240" height="160" class="red"></img>
-    <img src="textWidthSketch.png" width="240" height="160" class="gray"></img>
+    <img src="img/textWidthSketch.p5.png" width="240" height="160" class="red"></img>
+    <img src="img/textWidthSketch.png" width="240" height="160" class="gray"></img>
   </div>
   <div id='textOverlapSketch'>
-    <img src="textOverlapSketch.png" width="240" height="160" class="gray"></img>
+    <img src="img/textOverlapSketch.png" width="240" height="160" class="gray"></img>
   </div>
 
   <!-- animations -->

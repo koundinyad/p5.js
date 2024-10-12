@@ -79,23 +79,37 @@ import * as constants from '../core/constants';
 
 // p5 text methods /////////////////////////
 
+const validFontTypes = ['ttf', 'otf', 'woff', 'woff2'];
+const validFontTypesRE = new RegExp(`\.(${validFontTypes.join('|')})$`, 'i');
+const invalidFontError = 'Sorry, a string path is invalid. Only TTF, OTF, WOFF and WOFF2 font files are supported.';
+
 p5.prototype.loadFont = async function (...args) {
 
-  console.log('Renderer2D.prototype.loadFont');
-
-  // TODO: need to accept a name and path
+  //console.log('Renderer2D.prototype.loadFont');
 
   //p5._validateParameters('loadFont', args);
-  const name = args[0];
-  const path = args[1];
-  if (typeof name !== 'string' || typeof path !== 'string') {
-    throw new Error('loadFont() requires a name and path');
+
+
+  let name, error, path = args.shift();
+  if (typeof path !== 'string' || path.length === 0) {
+    p5._friendlyError(invalidFontError);
   }
+
+  if (typeof args[1] === 'string') {
+    name = args.shift();
+  }
+  else if (validFontTypesRE.test(path)) {
+    name = path.split('/').pop().split('.').shift();
+  }
+  else {
+    p5._friendlyError(invalidFontError);
+  }
+  //console.log('name:', name, 'path:', path)
 
   let callback, errorCallback, options;
 
   // check for callbacks
-  for (let i = 2; i < args.length; i++) {
+  for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (typeof arg === 'function') {
       if (!callback) {
@@ -120,8 +134,8 @@ p5.prototype.loadFont = async function (...args) {
       resolve(fontFile)
     },
       err => {
-        // Error handling
-        //p5._friendlyFileLoadError(5, path);
+        // Error handling ?
+        p5._friendlyFileLoadError(4, path);
         if (errorCallback) {
           errorCallback(err);
         } else {
@@ -135,12 +149,16 @@ p5.prototype.textFont = function (theFont, theSize, theWeight, theStyle, theVari
 
   //console.log('type.textFont:', theFont, theSize, theWeight || "", theStyle || "", theVariant || "");
 
-  let { drawingContext, states } = this._renderer;
+  let { states } = this._renderer;
 
   if (arguments.length) {
-    if (!theFont) {
+    if (theFont instanceof FontFace) {
+      theFont = theFont.family;
+    }
+    if (typeof theFont !== 'string') {
       throw new Error('null font passed to textFont');
     }
+
     if (typeof theSize === 'string') { // default to px
       //      theSize = `${theSize}px`;
       theSize = Number.parseFloat(theSize);
